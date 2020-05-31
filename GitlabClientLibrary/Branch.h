@@ -18,13 +18,13 @@ public:
 
     int newBranch(const std::string &accessToken, std::string &tempProjectId);
     std::vector<std::string> branchList(const std::string &accessToken, std::string &tempProjectId);
-    void deleteBranch(const std::string &accessToken, std::string &tempProjectId, int tempChoiceBranch);
+    std::string deleteBranch(const std::string &accessToken, std::string &tempProjectId, int tempChoiceBranch);
 
     void setName(std::string name);
 	std::string getName() const;
-    std::vector<std::string> branchName;
 private:
 	std::string name, projectSelectedId;
+	std::vector<std::string> branchName;
 };
 
 #endif /* SRC_BRANCH_H_ */

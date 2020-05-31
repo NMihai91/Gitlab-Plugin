@@ -143,7 +143,7 @@ void Utils::operationsMenu(){
 			}
 			break;
         case 2:
-            std::cout << "Al Groups:" << std::endl;
+            std::cout << "All Groups:" << std::endl;
             tempGroupList.clear();
             tempGroupList = group.groupList(getAccessToken());
 
@@ -155,7 +155,20 @@ void Utils::operationsMenu(){
             std::cin >> tempDel;
             group.setChoiceDelete(tempDel);
 
-			group.deleteGroup(getAccessToken());
+			try{
+				std::string receivedMessage = group.deleteGroup(getAccessToken());
+				if(receivedMessage == "The group was deleted!")
+				{
+					throw std::string("The group was deleted!");
+				}
+
+				std::cout << std::endl;
+
+				throw std::string(receivedMessage);
+			}catch(std::string& e){
+				std::cout << e << std::endl;
+			}
+			//group.deleteGroup(getAccessToken());
 			break;
 		case 3:
             tempGroupList.clear();
@@ -184,12 +197,18 @@ void Utils::operationsMenu(){
 			}
 			break;
 		case 5:
-			project.membershipProjectList(getAccessToken(), username);
+			tempProjectList.clear();
+			tempProjectList = project.membershipProjectList(getAccessToken(), username);
+			
+			std::cout << std::endl << "Membership Project List" << std::endl;
+			for(unsigned long i = 0; i < tempProjectList.size(); i++){
+                std::cout << i << ": "<< tempProjectList.at(i) << std::endl;
+            }
 			break;
 		case 6:
             tempProjectList.clear();
             tempProjectList = project.projectList(getAccessToken(), username);
-
+			
             std::cout << std::endl << "Project List" << std::endl;
             for(unsigned long i = 0; i < tempProjectList.size(); i++){
                 std::cout << i << ": "<< tempProjectList.at(i) << std::endl;
@@ -220,8 +239,20 @@ void Utils::operationsMenu(){
 
             std::cout << "Select a Project: ";
             std::cin >> tempChoiceProject;
+			
+			try{
+				std::string receivedMessage = project.deleteProject(getAccessToken(), username, tempChoiceProject);
+				if(receivedMessage == "The project was deleted!")
+				{
+					throw std::string("The project was deleted!");
+				}
 
-            project.deleteProject(getAccessToken(), username, tempChoiceProject);
+				std::cout << std::endl;
+
+				throw std::string(receivedMessage);
+			}catch(std::string& e){
+				std::cout << e << std::endl;
+			}
 			break;
 		case 9:
 			//Show projectList
@@ -305,8 +336,20 @@ void Utils::operationsMenu(){
 
             std::cout<<"\nSelect a branch to delete:";
             std::cin >> tempChoiceBranch;
+			
+			try{
+				std::string receivedMessage = branch.deleteBranch(getAccessToken(), tempSelectedProjectId, tempChoiceBranch);
+				if(receivedMessage == "The branch was deleted!")
+				{
+					throw std::string("The branch was deleted!");
+				}
 
-            branch.deleteBranch(getAccessToken(), tempSelectedProjectId, tempChoiceBranch);
+				std::cout << std::endl;
+
+				throw std::string(receivedMessage);
+			}catch(std::string& e){
+				std::cout << e << std::endl;
+			}
 			break;
 		case 12:
 			break;

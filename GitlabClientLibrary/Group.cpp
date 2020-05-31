@@ -65,7 +65,6 @@ void Group::setPath(){
     }
 
     this->path.append("GitlabPlugin");
-    std::cout << this->path;
 }
 
 std::string Group::createGroup(const std::string &accessToken){
@@ -145,7 +144,7 @@ std::vector<std::string> Group::groupList(const std::string &accessToken){
     return this->groupName;
 }
 
-void Group::deleteGroup(const std::string &accessToken){
+std::string Group::deleteGroup(const std::string &accessToken){
 	CURL* gitPlugin = curl_easy_init();
   	CURLcode res = CURLE_OK;
 
@@ -166,14 +165,15 @@ void Group::deleteGroup(const std::string &accessToken){
 		/* Set the DELETE command specifying the existing folder */ 
 		curl_easy_setopt(gitPlugin, CURLOPT_CUSTOMREQUEST, "DELETE");
 
-		res = curl_easy_perform(gitPlugin);		
+		res = curl_easy_perform(gitPlugin);	
+		curl_easy_cleanup(gitPlugin);		
  		if(res != CURLE_OK){
       		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
 			curl_easy_strerror(res);
+			return "The group was not deleted!";
 		}	
-	
-		curl_easy_cleanup(gitPlugin);
 	}
+	return "The group was deleted!";
 }
 
 std::string Group::getDescription() const{

@@ -57,7 +57,10 @@ std::string Project::createProject(const std::string &accessToken){
 	return message;
 }
 
-void Project::membershipProjectList(const std::string &accessToken,const std::string &username){
+std::vector<std::string> Project::membershipProjectList(const std::string &accessToken,const std::string &username){
+	this->projectId.clear();
+    this->projectName.clear();
+
 	Utils utils;
 	CURL *gitPlugin = curl_easy_init();
 	struct curl_slist *header = nullptr;
@@ -80,12 +83,13 @@ void Project::membershipProjectList(const std::string &accessToken,const std::st
 	//Clean gitPlugin
 	curl_easy_cleanup(gitPlugin);
 
-	//Show projects
 	for (auto it = jsonData.begin(); it != jsonData.end(); ++it)
 	{
-		std::cout << it.key() << ": ";
-		std::cout << (*it)["name"].asString() << "\n";
+		this->projectId.push_back((*it)["id"].asString());
+        this->projectName.push_back((*it)["name"].asString());
 	}
+
+    return this->projectName;
 }
 
 std::vector<std::string> Project::projectList(const std::string &accessToken,const std::string &username){
@@ -161,7 +165,7 @@ void Project::getProject(const std::string &accessToken,const std::string &usern
 	//std::cout << "Owner: " << jsonData["owner.username"].asString() << std::endl;
 }
 
-void Project::deleteProject(const std::string &accessToken,const std::string &username, int tempChoiceDelete){
+std::string Project::deleteProject(const std::string &accessToken,const std::string &username, int tempChoiceDelete){
 	Utils utils;
 	projectList(accessToken,username);
 
@@ -186,13 +190,14 @@ void Project::deleteProject(const std::string &accessToken,const std::string &us
 		/* Set the DELETE command specifying the existing folder */ 
 		curl_easy_setopt(gitPlugin, CURLOPT_CUSTOMREQUEST, "DELETE");
 
-		res = curl_easy_perform(gitPlugin);		
+		res = curl_easy_perform(gitPlugin);
+		curl_easy_cleanup(gitPlugin);
  		if(res != CURLE_OK){
       		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+			return "The project was not deleted!";
 		}	
-	
-		curl_easy_cleanup(gitPlugin);
 	}
+	return "The project was deleted!";
 }
 
 std::vector<std::string> Project::getProjectId() const{

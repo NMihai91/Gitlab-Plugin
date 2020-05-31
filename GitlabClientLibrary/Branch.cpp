@@ -83,7 +83,7 @@ std::vector<std::string> Branch::branchList(const std::string &accessToken, std:
     return this->branchName;
 }
 
-std::string Branch::deleteBranch(const std::string &accessToken, std::string &tempProjectId, int tempChoiceBranch){
+void Branch::deleteBranch(const std::string &accessToken, std::string &tempProjectId, int tempChoiceBranch){
 	Utils utils;
 	CURL *gitPlugin = curl_easy_init();
 	CURLcode res = CURLE_OK;
@@ -111,14 +111,13 @@ std::string Branch::deleteBranch(const std::string &accessToken, std::string &te
 		/* Set the DELETE command specifying the existing folder */ 
 		curl_easy_setopt(gitPlugin, CURLOPT_CUSTOMREQUEST, "DELETE");
 
-		res = curl_easy_perform(gitPlugin);
-		curl_easy_cleanup(gitPlugin);
- 		if(res != CURLE_OK){
-    		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-			return "The branch was not deleted!";
-		}
-	}
-	return "The branch was deleted!";
+        res = curl_easy_perform(gitPlugin);
+        if(res != CURLE_OK){
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        }
+
+        curl_easy_cleanup(gitPlugin);
+    }
 }
 
 std::string Branch::getName() const{

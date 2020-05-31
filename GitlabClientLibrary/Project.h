@@ -25,9 +25,9 @@ public:
     std::vector<std::string> projectName;
 	std::string createProject(const std::string &accesToken);
     std::vector<std::string> projectList(const std::string &accessToken, const std::string &username);
-    std::vector<std::string> membershipProjectList(const std::string &accessToken, const std::string &username); 
+    void membershipProjectList(const std::string &accessToken, const std::string &username);
     void getProject(const std::string &accessToken, const std::string &username, int tempChoiceProject);
-    std::string deleteProject(const std::string &accessToken, const std::string &username, int tempChoiceDelete);
+    void deleteProject(const std::string &accessToken, const std::string &username, int tempChoiceDelete);
     std::vector<std::string> getProjectId() const;
 private:
 	std::string name;

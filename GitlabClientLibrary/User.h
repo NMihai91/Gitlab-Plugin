@@ -14,7 +14,7 @@
 
 //#include <iostream>
 //#include <cstdlib>
-//#include <string.h>
+//#include<string.h>
 //#include <unistd.h>
 //#include <sstream>
 //#include <json-c/json.h>

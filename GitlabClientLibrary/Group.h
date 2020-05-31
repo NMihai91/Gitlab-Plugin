@@ -49,7 +49,7 @@ public:
 	//Show Group List
     std::vector<std::string> groupList(const std::string &accessToken);
 	//Delete a Group
-	std::string deleteGroup(const std::string &accessToken);
+	void deleteGroup(const std::string &accessToken);
 private:
 	std::string name, path, visibility, description;
 	std::vector<std::string> groupId;

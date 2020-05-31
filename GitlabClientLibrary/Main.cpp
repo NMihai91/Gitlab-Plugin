@@ -8,7 +8,7 @@
 #include "Utils.h"
 #include <iostream>
 
-int main(){
+int main(int argc, char** argv){
 	Utils utils;
 
 	utils.loginMenu();
